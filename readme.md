@@ -35,4 +35,4 @@ Steps to test the application:
 
 8- *important* run command "composer dump-autoload -o".
 
-9- open your browser and enter "http://localhost/php_crawler/crawler_example.php".
+9- open your browser and enter "http://localhost/{project name}/crawler_example.php".
