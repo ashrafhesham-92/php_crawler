@@ -1,0 +1,18 @@
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Youpie/simple-html-dom"
+    }
+  ],
+
+  "require": {
+    "paquettg/php-html-parser": "^1.7"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "App\\":"application/"
+    }
+  }
+}
