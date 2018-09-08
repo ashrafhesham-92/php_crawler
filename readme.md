@@ -23,8 +23,12 @@ Steps to test the application:
 
 2- import the database "crawler.sql" which is located in the project's root directory.
 
-3- open terminal and change directory to the project's directory.
+3- open the project directory and open config.php 
 
-4- run command "composer install"
+4- change the values of the 'db' array to match your database config.
 
-5- open your browser and enter "http://localhost/php_crawler/crawler_example.php"
+5- open terminal and change directory to the project's directory.
+
+6- run command "composer install"
+
+7- open your browser and enter "http://localhost/php_crawler/crawler_example.php"
