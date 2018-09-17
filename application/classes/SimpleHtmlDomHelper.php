@@ -50,11 +50,31 @@ class SimpleHtmlDomHelper
      */
     public function getChildLinks(string $base_link) : array
     {
+        $urlFilterMethod = $GLOBALS['config']['app']['url_filter_method'];
+
         try
         {
             $link_content = static::$dom_parser->loadFromUrl($base_link);
 
-            $hrefs = $this->getFilteredHrefs($link_content->find('a')->toArray());
+            switch($urlFilterMethod)
+            {
+                case 'normal':
+                $href_filter = new BasicHrefFilter($link_content->find('a')->toArray());
+                
+                // $hrefs = $this->getFilteredHrefs($link_content->find('a')->toArray());
+                $hrefs = $href_filter->filteredHrefs;
+                break;
+                case 'with_id':
+                $href_filter = new HrefWithIDFilter($link_content->find('a')->toArray());
+                $hrefs = $href_filter->filteredHrefs;
+                break;
+                default:
+                $href_filter = new BasicHrefFilter($link_content->find('a')->toArray());
+            
+                // $hrefs = $this->getFilteredHrefs($link_content->find('a')->toArray());
+                $hrefs = $href_filter->filteredHrefs;
+                break;
+            }
 
             return $hrefs;
         }
@@ -75,23 +95,23 @@ class SimpleHtmlDomHelper
      * @param array $anchors
      * @return mixed
      */
-    protected function getFilteredHrefs(array $anchors) : array
-    {
-        $filtered_hrefs = [];
+    // protected function getFilteredHrefs(array $anchors) : array
+    // {
+    //     $filtered_hrefs = [];
 
-        foreach($anchors as $anchor)
-        {
-            if($anchor->href !== null)
-            {
-                if($this->validHref($anchor->href))
-                {
-                    $filtered_hrefs[] = $anchor->href;
-                }
-            }
-        }
+    //     foreach($anchors as $anchor)
+    //     {
+    //         if($anchor->href !== null)
+    //         {
+    //             if($this->validHref($anchor->href))
+    //             {
+    //                 $filtered_hrefs[] = $anchor->href;
+    //             }
+    //         }
+    //     }
 
-        return $filtered_hrefs;
-    }
+    //     return $filtered_hrefs;
+    // }
 
     /**
      * The purpose of this function is to make sure the href is valid based on th e following criteria :
@@ -105,13 +125,13 @@ class SimpleHtmlDomHelper
      * @param string $href
      * @return bool
      */
-    protected function validHref(string $href) : bool
-    {
-        if($href[0] === '/' && strpos($href, '#') === false)
-        {
-            return true;
-        }
+    // protected function validHref(string $href) : bool
+    // {
+    //     if($href[0] === '/' && strpos($href, '#') === false)
+    //     {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 }

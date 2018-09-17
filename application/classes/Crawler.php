@@ -26,6 +26,13 @@ class Crawler
      */
     private $links_tree_builder;
 
+    /**
+     * holds hierarhy of trees of link and its sub links when we change the "page" parameter in the link
+     *
+     * @var array
+     */
+    private static $multi_trees = [];
+
     public function __construct(string $base_url)
     {
         $this->base_url = $base_url;
@@ -46,5 +53,20 @@ class Crawler
     public function crawl(string $initial_page, $max_level_to_build_children_for = 0) : array
     {
         return $this->links_tree_builder->buildLinksTree($initial_page, $max_level_to_build_children_for)->getTree();
+    }
+
+    public function crawlWithPagesParam(string $page_url, string $page_param_name = 'ep', int $start_with_page = 1, int $max_page = 2)
+    {
+        $this->links_tree_builder = new LinksTreeBuilder($this->base_url);
+        $url = $page_url."?$page_param_name=$start_with_page";
+        
+        if($start_with_page > $max_page)
+        {
+            return static::$multi_trees;
+        }
+
+        static::$multi_trees[] = $this->links_tree_builder->buildLinksTree($url, 0)->getTree();
+        
+        return $this->crawlWithPagesParam($page_url, $page_param_name, ++$start_with_page, $max_page);
     }
 }

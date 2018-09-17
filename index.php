@@ -5,6 +5,8 @@
  * Date: 9/8/2018
  * Time: 10:40 PM
  */
+require "vendor/autoload.php";
+
 use App\Classes\DatabaseDrivers\DatabaseDriverRegistrer;
 
 $config = require_once('config.php');

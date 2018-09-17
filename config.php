@@ -20,6 +20,8 @@ return[
     ],
     'app' => [
         'base_url' => 'https://www.homegate.ch',
-        'initial_page' => '/mieten/immobilien/kanton-zuerich/trefferliste'
+        'initial_page' => '/mieten/immobilien/kanton-zuerich/trefferliste',
+        'url_filter_method' => 'with_id', // normal or with_id,
+        'crawling_method' => 'with_page_param', // normal or with_page_param
     ]
 ];

@@ -71,13 +71,13 @@ class LinksTreeBuilder implements LinksTreeBuilderInterface
      * object of CrawledLinks model that will be used to save the crawled links to the database
      * @var
      */
-    private static $crawled_links_model;
+    private $crawled_links_model;
 
     public function __construct(string $base_url)
     {
         $this->simple_html_dom_helper = SimpleHtmlDomHelper::_initialize();
         $this->base_url = $base_url;
-        static::$crawled_links_model = new CrawledLinks();
+        $this->crawled_links_model = new CrawledLinks();
     }
 
     /**
@@ -110,7 +110,11 @@ class LinksTreeBuilder implements LinksTreeBuilderInterface
         }
 
         // insert generated links tree to database
-        static::$crawled_links_model->saveCrawledLinks($this->tree);
+        if($GLOBALS['config']['app']['crawling_method'] === 'normal')
+        {
+            $this->crawled_links_model->saveCrawledLinks($this->tree);
+        }
+        
         return $this;
     }
 
@@ -128,10 +132,10 @@ class LinksTreeBuilder implements LinksTreeBuilderInterface
     function buildInitialLevels(string $initial_page) : LinksTreeBuilderInterface
     {
         $this->tree[$this->pointer] = $this->base_url.$initial_page;
-
+        
         $child_links = $this->simple_html_dom_helper->getChildLinks($this->base_url.$initial_page);
         $this->tree[++$this->pointer] = $child_links;
-
+        
         return $this;
     }
 
